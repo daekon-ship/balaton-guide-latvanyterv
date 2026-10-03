@@ -193,8 +193,17 @@
         });
       };
 
-      var openModal = function (startIndex) {
-        lastFocused = document.activeElement;
+      var openModal = function (startIndex, trigger) {
+        var active = document.activeElement;
+        /* a megnyitó elemre áll vissza a fókusz; egyes böngészők
+           (Safari/Firefox) nem fókuszálják a kattintott gombot */
+        if (trigger && document.contains(trigger)) {
+          lastFocused = trigger;
+        } else if (active && active !== document.body) {
+          lastFocused = active;
+        } else {
+          lastFocused = null;
+        }
         modal.hidden = false;
         modal.classList.add("is-open");
         document.body.classList.add("is-locked");
@@ -211,13 +220,18 @@
         modal.classList.remove("is-open");
         modal.hidden = true;
         document.body.classList.remove("is-locked");
-        if (lastFocused && lastFocused.focus) lastFocused.focus();
+        var target = lastFocused;
+        if (target && target.focus && document.contains(target)) target.focus();
+        else {
+          var home = document.querySelector("[data-open-modal]");
+          if (home) home.focus();
+        }
       };
 
       document.querySelectorAll("[data-open-modal]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           var idx = parseInt(btn.getAttribute("data-page"), 10) || 0;
-          openModal(idx);
+          openModal(idx, btn);
         });
       });
 
