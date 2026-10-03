@@ -1,0 +1,13 @@
+# Kutatási/alapkészítő fájlok (nem részei az átadandó látványtervnek)
+_research/
+
+# Freebuff belső mappája
+.freebuff/
+
+# Nem hivatkozott segédfájl
+assets/fonts/gf.css
+
+# OS / editor
+Thumbs.db
+.DS_Store
+*.log
